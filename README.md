@@ -7,4 +7,4 @@ As a game developer myself I've been always fascinated by the rendering aspect o
 And in the light of the recent trends, raytracing rendering has been gaining quite a lot of love, especially with posts like [Daily Pathtracer](https://aras-p.info/blog/2018/03/28/Daily-Pathtracer-Part-0-Intro/) from Aras Pranckevičius.
 I've come across one particularly interesting papers from [Peter Shirley](https://twitter.com/Peter_shirley/). Although they are really easy and intertaining to read, I didn't like the necessity to relaunch the programm every time I need to check my changes and open external editor to actually see what my rendered has generated.
 
-This project's aim is to give a sandbox for everyone like me, who wants to play around with rendering technicues, but doesn't want to spend too much time on preparations.
+This project's aim is to give a sandbox for everyone like me, who wants to play around with rendering techniques, but doesn't want to spend too much time on preparations.

@@ -1,5 +1,5 @@
 # win32-softrender-starter
-The absolute minimum code to have a runtime display of image buffer on Windows platform with hot reloading render code that allows you to quickly iterate over your algorithms with need of restarting the whole programm.
+The absolute minimum code to have a runtime display of image buffer on Windows platform with hot reloading render code that allows you to quickly iterate over your algorithms without the need of restarting the whole programm.
 
 This project is inspired by and based on the work of the almighty [Casey Muratori](https://caseymuratori.com/about), author of [Handmade Hero](https://handmadehero.org/).
 

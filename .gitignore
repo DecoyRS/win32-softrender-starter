@@ -7,6 +7,10 @@
 *.o
 *.obj
 
+# Debug Info files
+*.pdb
+*.ilk
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -30,3 +34,11 @@
 *.exe
 *.out
 *.app
+
+# IDE settings
+*.vscode
+*.vs
+
+# Project specific settings
+build/*
+libs/*

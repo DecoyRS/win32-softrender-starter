@@ -1,20 +1,13 @@
 #pragma once
 
-// The basic set of headers we need.
-// Header rule 101: Don't pull in more than you need to.
-// In particular, don't include stdio.h, windows.h or STL in headers
-// that get used everywhere. Your compilation speed will skyrocket.
-#include <stdint.h>
+#include <cstdint>
 #include <math.h>
 #include <xmmintrin.h>
 
-// If you want it inlined, inline it.
-// If you don't want it inlined, don't inline it.
-// There is no in-between. Make your mind up :)
 #define VM_INLINE	__forceinline
 
 // Some helpers.
-#define M_PI        3.14159265358979323846f
+constexpr double M_PI = 3.14159265358979323846f;
 #define DEG2RAD(_a)	((_a)*M_PI/180.0f)
 #define RAD2DEG(_a)	((_a)*180.0f/M_PI)
 #define INT_MIN     (-2147483647 - 1)
@@ -114,40 +107,12 @@ struct float3
 	VM_INLINE explicit float3(float x, float y, float z) { m = _mm_set_ps(z, z, y, x); }
 	VM_INLINE explicit float3(__m128 v) { m = v; }
 	
-	// Member accessors.
-	// In an ideal world, we'd just use a union and allow the caller to access .x directly.
-	// Unfortunately __m128 requires us to write wrappers. This sucks, and breaks HLSL
-	// compatibility, but what can you do.
-	// VM_INLINE float x() const { return _mm_cvtss_f32(m); }
-	// VM_INLINE float y() const { return _mm_cvtss_f32(_mm_shuffle_ps(m, m, _MM_SHUFFLE(1, 1, 1, 1))); }
-	// VM_INLINE float z() const { return _mm_cvtss_f32(_mm_shuffle_ps(m, m, _MM_SHUFFLE(2, 2, 2, 2))); }
-	
 	// Helpers for common swizzles.
 	VM_INLINE float3 yzx() const { return SHUFFLE3(*this, 1, 2, 0); }
 	VM_INLINE float3 zxy() const { return SHUFFLE3(*this, 2, 0, 1); }
 	
 	// Unaligned store.
 	VM_INLINE void store(float *p) const { p[0] = x; p[1] = y; p[2] = z; }
-
-	// Accessors to write to the components directly.
-	// Generally speaking you should prefer to construct a new vector, rather than
-	// modifiying the components of an existing vector.
-	// void setX(float x)
-	// {
-	// 	m = _mm_move_ss(m, _mm_set_ss(x));
-	// }
-	// void setY(float y)
-	// {
-	// 	__m128 t = _mm_move_ss(m, _mm_set_ss(y));
-	// 	t = _mm_shuffle_ps(t, t, _MM_SHUFFLE(3, 2, 0, 0));
-	// 	m = _mm_move_ss(t, m);
-	// }
-	// void setZ(float z)
-	// {
-	// 	__m128 t = _mm_move_ss(m, _mm_set_ss(z));
-	// 	t = _mm_shuffle_ps(t, t, _MM_SHUFFLE(3, 0, 1, 0));
-	// 	m = _mm_move_ss(t, m);
-	// }
 
 	// For things that really need array-style access.
 	VM_INLINE float operator[] (size_t i) const { return m.m128_f32[i]; };

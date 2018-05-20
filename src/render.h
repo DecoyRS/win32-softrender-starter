@@ -7,5 +7,5 @@
     #define DLLEXPORT
 #endif
 
-DLLEXPORT void init(uint32_t * buffer, const uint32_t width, const uint32_t height, const uint32_t pitch);
-DLLEXPORT void render(const uint32_t delta_time);
+DLLEXPORT void __cdecl init(uint32_t * buffer, const uint32_t width, const uint32_t height, const uint32_t pitch);
+DLLEXPORT void __cdecl render(const uint32_t delta_time);

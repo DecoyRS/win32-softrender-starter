@@ -159,8 +159,6 @@ WinMain(HINSTANCE Instance,
                                             0);
         if(window_handle){
             running = true;
-            uint32_t x_offset = 0;
-            uint32_t y_offset = 0;
             MSG message;
             init_impl(reinterpret_cast<uint32_t *>(global_backbuffer.memory), global_backbuffer.width, global_backbuffer.height, global_backbuffer.pitch);
             while(running) {
@@ -186,15 +184,13 @@ WinMain(HINSTANCE Instance,
                     DispatchMessage(&message);
                 }
 
-                render_impl(x_offset);
+                render_impl(0);
 
                 HDC device_context = GetDC(window_handle);
                             
                 auto dimensions = win32GetWindowDimension(window_handle);
                 Win32UpdateWindow(device_context, dimensions.first, dimensions.second, global_backbuffer, 0, 0);
                 ReleaseDC(window_handle, device_context);
-                x_offset += 1;
-                y_offset += 2;
             }
             
         } else {

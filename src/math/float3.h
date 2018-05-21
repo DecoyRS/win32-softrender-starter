@@ -30,70 +30,21 @@ struct ScalarAccessor
         return _mm_cvtss_f32(_mm_shuffle_ps(m, m, _MM_SHUFFLE(Index, Index, Index, Index)));
     }
 
-    ScalarAccessor& operator= (float x);
-};
-
-template <>
-struct ScalarAccessor<0>
-{
-    __m128 m;
-
-    // conversion into a scalar value ("accessor-to-scalar" conversion)
-    operator float () const
-    {
-        return _mm_cvtss_f32(_mm_shuffle_ps(m, m, _MM_SHUFFLE(0, 0, 0, 0)));
-    }
-
-    // assignment of a scalar value ("scalar-to-accessor" conversion)
-	// x
-
-    ScalarAccessor& operator= (float x)
-    {
-		m = _mm_move_ss(m, _mm_set_ss(x));
-        return *this;
-    }
-};
-
-template <>
-struct ScalarAccessor<1>
-{
-    __m128 m;
-
-    // conversion into a scalar value ("accessor-to-scalar" conversion)
-    operator float () const
-    {
-        return _mm_cvtss_f32(_mm_shuffle_ps(m, m, _MM_SHUFFLE(1, 1, 1, 1)));;
-    }
-
-    // assignment of a scalar value ("scalar-to-accessor" conversion)
-	// y
-    ScalarAccessor& operator= (float y)
-    {
-		__m128 t = _mm_move_ss(m, _mm_set_ss(y));
-		t = _mm_shuffle_ps(t, t, _MM_SHUFFLE(3, 2, 0, 0));
-		m = _mm_move_ss(t, m);
-        return *this;
-    }
-};
-template <>
-struct ScalarAccessor<2>
-{
-    __m128 m;
-
-    // conversion into a scalar value ("accessor-to-scalar" conversion)
-    operator float () const
-    {
-        return _mm_cvtss_f32(_mm_shuffle_ps(m, m, _MM_SHUFFLE(2, 2, 2, 2)));;
-    }
-
-    // assignment of a scalar value ("scalar-to-accessor" conversion)
-	// z
-    ScalarAccessor& operator=(float z)
-    {
-		__m128 t = _mm_move_ss(m, _mm_set_ss(z));
-		t = _mm_shuffle_ps(t, t, _MM_SHUFFLE(3, 0, 1, 0));
-		m = _mm_move_ss(t, m);
-        return *this;
+    ScalarAccessor& operator= (float s) {
+        if constexpr (Index == 0) {
+            m = _mm_move_ss(m, _mm_set_ss(x));
+            return *this;
+        } else if constexpr (Index == 1) {
+            __m128 t = _mm_move_ss(m, _mm_set_ss(y));
+            t = _mm_shuffle_ps(t, t, _MM_SHUFFLE(3, 2, 0, 0));
+            m = _mm_move_ss(t, m);
+            return *this;
+        } else constexpr {
+            __m128 t = _mm_move_ss(m, _mm_set_ss(z));
+            t = _mm_shuffle_ps(t, t, _MM_SHUFFLE(3, 0, 1, 0));
+            m = _mm_move_ss(t, m);
+            return *this;
+        }
     }
 };
 

@@ -2,10 +2,10 @@
 
 #include "math/float3.h"
 
-class ray {
+class Ray {
 public:
-    ray() {}
-    ray(float3 a, float3 b):A(a), B(b){}
+    Ray() {}
+    Ray(float3 a, float3 b):A(a), B(b){}
 
     float3 origin() const { return A; }
     float3 direction() const { return B; }

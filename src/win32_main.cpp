@@ -31,10 +31,7 @@ struct Win32OffscreenBuffer {
 static bool running;
 static Win32OffscreenBuffer global_backbuffer;
 
-namespace {
-    static const char * init_mangled = "init";
-    static const char * render_mangled = "render";
-}
+#define NAME(func) #func
 
 static void Win32ResizeDeviceIndependentBitmap(Win32OffscreenBuffer * buffer, const LONG width, const LONG height) {
 
@@ -132,11 +129,13 @@ WinMain(HINSTANCE Instance,
     // I wonder if fs::last_write_time does the same. For now, I'm assuming It works in some other way doesn't create HANDLE implicitly.
 	auto last_write_time = fs::last_write_time("../libs/render.dll");
     bool result = ::CopyFile("../libs/render.dll", "render_temp.dll", false);
+    result = ::CopyFile("../libs/render.pdb", "render_temp.pdb", false);
+    result = ::CopyFile("../libs/vc140.pdb", "vc140_temp.pdb", false);
     HMODULE render_dll = ::LoadLibrary("render_temp.dll");
     auto init_impl = reinterpret_cast<decltype(init) *>(
-        ::GetProcAddress(render_dll, init_mangled));
+        ::GetProcAddress(render_dll, NAME(init)));
     auto render_impl = reinterpret_cast<decltype(render) *>(
-        ::GetProcAddress(render_dll, render_mangled));
+        ::GetProcAddress(render_dll, NAME(render)));
 
     WNDCLASS window_class = {};
     window_class.style = CS_OWNDC|CS_HREDRAW;
@@ -168,12 +167,14 @@ WinMain(HINSTANCE Instance,
                     auto free_lib_result = ::FreeLibrary(render_dll);
 					render_dll = 0;
                     // TODO(apirogov): For some reason fs::copy_file has failed me with throwing exception instead of returning an error code
-                    auto copy_file_result = ::CopyFile("../libs/render.dll", "render_temp.dll", false);
+                    bool result = ::CopyFile("../libs/render.dll", "render_temp.dll", false);
+                    result = ::CopyFile("../libs/render.pdb", "render_temp.pdb", false);
+                    result = ::CopyFile("../libs/vc140.pdb", "vc140_temp.pdb", false);
                     render_dll = ::LoadLibrary("render_temp.dll");
                     init_impl = reinterpret_cast<decltype(init) *>(
-                        ::GetProcAddress(render_dll, init_mangled));
+                        ::GetProcAddress(render_dll, NAME(init)));
                     render_impl = reinterpret_cast<decltype(render) *>(
-                        ::GetProcAddress(render_dll, render_mangled));
+                        ::GetProcAddress(render_dll, NAME(render)));
                     init_impl(reinterpret_cast<uint32_t *>(global_backbuffer.memory), global_backbuffer.width, global_backbuffer.height, global_backbuffer.pitch);
                 }
                 while(PeekMessage(&message, 0, 0, 0, PM_REMOVE)) {

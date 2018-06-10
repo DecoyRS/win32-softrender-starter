@@ -1,5 +1,6 @@
 #pragma once
 
+#include "math/float3.h"
 #include "ray.h"
 
 class Camera {

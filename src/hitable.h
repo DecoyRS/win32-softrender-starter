@@ -7,12 +7,15 @@
 #include <optional>
 #include <vector>
 
+class Material;
+
 struct HitRecord {
-    HitRecord(float _t, float3 _p, float3 _n): t(_t), p(_p), normal(_n) {}
+    HitRecord(float _t, float3 _p, float3 _n, Material * _mat): t(_t), p(_p), normal(_n), mat(_mat) {}
     HitRecord(const HitRecord&) = default;
     float t;
     float3 p;
     float3 normal;
+    Material * mat;
 };
 
 class Hitable {
